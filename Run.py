@@ -17,7 +17,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 par = argparse.ArgumentParser(description='未知版本(内测版)')
 par.add_argument('--url', '-u', help='需要扫描的url', default=False)
 par.add_argument('--timeout', '-t', help='指定超时数值,默认为6', default=6, type=int)
-par.add_argument('--thead', '-n', help='线程数,默认为1', type=int, default=1)
+par.add_argument('--thead', '-n', help='线程数,默认为1(暂不开发)', type=int, default=1)
 par.add_argument('--file', '-f', help='批量url文本', default=False)
 args = par.parse_args()
 
