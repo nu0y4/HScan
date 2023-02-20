@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/漏扫项目.iml" filepath="$PROJECT_DIR$/.idea/漏扫项目.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/HScan.iml" filepath="$PROJECT_DIR$/.idea/HScan.iml" />
     </modules>
   </component>
 </project>

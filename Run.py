@@ -3,10 +3,15 @@ from POC import CNVD_2021_30167
 import argparse
 from urllib.parse import urlparse
 
-from colorama import init, Fore, Back, Style
 from POC.用友NC目录遍历漏洞 import yonyou_path
+from POC.泛微OAV8SQL注入 import fanwei_OA_sql
+from POC.龙璟科技_电池能量BEMS任意下载 import BEMS_download
+from POC.齐治堡垒机任意用户登录 import qzbl_anylogin
 from main import hprint
 import main
+
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 par = argparse.ArgumentParser(description='未知版本(内测版)')
 par.add_argument('--url', '-u', help='需要扫描的url', default=False)
@@ -52,6 +57,21 @@ def check_POC(in_url, timeout=6):
         check_num = check_num + 1
 
     re = yonyou_path(url=turl, timeout=timeout)
+    if '成功' == re:
+        main.print_green()
+        check_num = check_num + 1
+
+    re = fanwei_OA_sql(url=turl,timeout=timeout)
+    if '成功' == re:
+        main.print_green()
+        check_num = check_num + 1
+
+    re = BEMS_download(url=turl, timeout=timeout)
+    if '成功' == re:
+        main.print_green()
+        check_num = check_num + 1
+
+    re = qzbl_anylogin(url=turl, timeout=timeout)
     if '成功' == re:
         main.print_green()
         check_num = check_num + 1
