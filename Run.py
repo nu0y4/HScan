@@ -1,5 +1,6 @@
 from POC import CVE_2020_27986
 from POC import CNVD_2021_30167
+from POC import CVE_2021_36749
 import argparse
 from urllib.parse import urlparse
 
@@ -7,11 +8,13 @@ from POC.用友NC目录遍历漏洞 import yonyou_path
 from POC.泛微OAV8SQL注入 import fanwei_OA_sql
 from POC.龙璟科技_电池能量BEMS任意下载 import BEMS_download
 from POC.齐治堡垒机任意用户登录 import qzbl_anylogin
-from POC.通达OA2017前台任意用户登录漏洞 import get2017Session,getV11Session
+from POC.金和OA_C6任意下载 import jdOA_anydownload
+from POC.通达OA2017前台任意用户登录漏洞 import get2017Session, getV11Session
 from main import hprint
 import main
 
 import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 par = argparse.ArgumentParser(description='未知版本(内测版)')
@@ -52,6 +55,11 @@ def check_POC(in_url, timeout=6):
         main.print_green()
         check_num = check_num + 1
 
+    re = CVE_2021_36749.Apache_Druid_any_path(inurl=turl, timeout=timeout)
+    if '返回成功' in re:
+        main.print_green(context=re)
+        check_num = check_num + 1
+
     re = CNVD_2021_30167.yonyou_nc(url=turl, timeout=timeout)
     if '成功' == re:
         main.print_green()
@@ -62,7 +70,7 @@ def check_POC(in_url, timeout=6):
         main.print_green()
         check_num = check_num + 1
 
-    re = fanwei_OA_sql(url=turl,timeout=timeout)
+    re = fanwei_OA_sql(url=turl, timeout=timeout)
     if '成功' == re:
         main.print_green()
         check_num = check_num + 1
@@ -87,11 +95,19 @@ def check_POC(in_url, timeout=6):
         main.print_green(context=re)
         check_num = check_num + 1
 
+    re = jdOA_anydownload(url=turl, timeout=timeout)
+    if '成功' in re:
+        main.print_green(context=re)
+        check_num = check_num + 1
+
+
     main.print_yellow(f'一共检测到{check_num}个漏洞')
+
 
 def url_check(in_url):
     main.print_yellow('检测到单链接模式')
     check_POC(in_url)
+
 
 def file_check(in_file):
     main.print_yellow('检测到批量模式')
