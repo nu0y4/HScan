@@ -15,7 +15,8 @@ def yonyou_path(url, timeout=6):
         re = requests.get(url + '/NCFindWeb?service=IPreAlertConfigService&filename', timeout=timeout)
         # print(re)
         if re.text:
-            return '成功'
+            if not 'Error 404 Not Found' in re.text:
+                return '成功'
     except ConnectionError as e:
         return '连接失败'
     except TimeoutError as e:
