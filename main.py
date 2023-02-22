@@ -1,7 +1,5 @@
 from colorama import Fore
 
-
-
 logo_pic_h = '''
 ██╗  ██╗██╗  ██╗ ██████╗██╗  ██╗██████╗ ██╗   ██╗███████╗███████╗███████╗██████╗ 
 ██║  ██║██║  ██║██╔════╝██║ ██╔╝██╔══██╗██║   ██║╚════██║██╔════╝██╔════╝██╔══██╗
@@ -10,7 +8,6 @@ logo_pic_h = '''
 ██║  ██║     ██║╚██████╗██║  ██╗██████╔╝╚██████╔╝   ██║  ███████╗███████╗██║  ██║
 ╚═╝  ╚═╝     ╚═╝ ╚═════╝╚═╝  ╚═╝╚═════╝  ╚═════╝    ╚═╝  ╚══════╝╚══════╝╚═╝  ╚═╝'''
 
-
 logo_pic_t = '''                                                
                         ███████╗ ██████╗ ██████╗                                 
                         ██╔════╝██╔═══██╗██╔══██╗                                
@@ -18,15 +15,16 @@ logo_pic_t = '''
                         ╚════██║██║   ██║██╔══██╗                                
                         ███████║╚██████╔╝██║  ██║                                
                         ╚══════╝ ╚═════╝ ╚═╝  ╚═╝'''
+
+
 def hprint(context='',  # 内容。
            tf=True,  # 是否在内容前面带"[*]"
            enter=True,  # 是否在内容之后回车
            logo=False
            ):
-
     if logo:
-        print_red(logo_pic_h,tf=False)
-        print_green(logo_pic_t,tf=False)
+        print_red(logo_pic_h, tf=False)
+        print_green(logo_pic_t, tf=False)
     else:
         if tf:
             if enter:
@@ -40,25 +38,25 @@ def hprint(context='',  # 内容。
                 print(f'{context}', end='')
 
 
-def print_red(context='====检测到漏洞====',tf=True):
-    hprint(Fore.RED + context + Fore.RESET,tf=tf)
+def print_red(context='====检测到漏洞====', tf=True):
+    hprint(Fore.RED + context + Fore.RESET, tf=tf)
 
 
-def print_green(context='====检测到漏洞====',tf=True):
-    hprint(Fore.GREEN + context + Fore.RESET,tf=tf)
+def print_green(context='====检测到漏洞====', tf=True):
+    hprint(Fore.GREEN + context + Fore.RESET, tf=tf)
 
 
-def print_white(context='====检测到漏洞====',tf=True):
-    hprint(Fore.WHITE + context + Fore.RESET,tf=tf)
+def print_white(context='====检测到漏洞====', tf=True):
+    hprint(Fore.WHITE + context + Fore.RESET, tf=tf)
 
 
-def print_black(context='====检测到漏洞====',tf=True):
-    hprint(Fore.BLACK + context + Fore.RESET,tf=tf)
+def print_black(context='====检测到漏洞====', tf=True):
+    hprint(Fore.BLACK + context + Fore.RESET, tf=tf)
 
 
-def print_yellow(context='====检测到漏洞====',tf=True):
-    hprint(Fore.YELLOW + context + Fore.RESET,tf=tf)
+def print_yellow(context='====检测到漏洞====', tf=True):
+    hprint(Fore.YELLOW + context + Fore.RESET, tf=tf)
 
 
-def print_blue(context='====检测到漏洞====',tf=True):
-    hprint(Fore.BLUE + context + Fore.RESET,tf=tf)
+def print_blue(context='====检测到漏洞====', tf=True):
+    hprint(Fore.BLUE + context + Fore.RESET, tf=tf)
