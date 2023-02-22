@@ -1,5 +1,19 @@
 # HScan
 
+## POC列表
+```
+CVE-2020-27986
+CVE-2023-23752
+CVE-2021-36749
+CNVD-2021-30167
+用友NC目录遍历
+泛微OAV8SQL注入
+龙璟科技 电池能量BEMS 任意文件下载漏洞
+齐治堡垒机任意用户登录
+金和OA-C6任意文件下载
+一米OA 任意文件读取漏洞
+```
+
 ## 安装:
 ```
 git clone https://github.com/soryecker/HScan.git
