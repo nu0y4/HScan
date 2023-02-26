@@ -14,6 +14,11 @@ CNVD-2021-30167
 金和OA-C6任意文件下载
 一米OA 任意文件读取漏洞
 ```
+## poc检测
+![image](https://user-images.githubusercontent.com/46450756/221391060-7b0687d0-46fe-4f36-9714-97471904eee4.png)
+
+## url爬虫
+![image](https://user-images.githubusercontent.com/46450756/221391193-150dc6c0-2278-4f58-9046-08ff9c1c0a1d.png)
 
 ## 安装:
 ```
