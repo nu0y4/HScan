@@ -46,10 +46,15 @@ def pocfuntion(pocname='请输入POC名字',  # POC的名字
             for i in list:
                 # 如果不存在这些关键词的返回内容，即if_error为1
                 if not i in re.text:
-                    if includelist in re.text:
-                        if_error = 1
-                        if ifprint:
-                            main.print_red(re.text)
+                    if isinstance(includelist, str):
+                        return 1
+                    elif isinstance(includelist, list):
+                        for item in includelist:
+                            if item in re.text:
+                                if_error = 1
+                                if ifprint:
+                                    main.print_red(re.text)
+
                 # 但凡有一个是包含其中一种关键词的都if_error为0
                 else:
                     if_error = 0
