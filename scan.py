@@ -3,7 +3,7 @@ import random
 from colorama import Fore
 
 from HScan.main import print_green, print_red, print_yellow
-from HScan import Run
+from HScan import Run, qz
 from HScan import JsScan, logo
 
 info = {
@@ -40,10 +40,12 @@ def main():
         if key == '2':
             JsScan.main()
         if key == '3':
-            print('权重')
+            qz.main()
         if key == '0':
             print_red('[+]再见~ 祝，我们都每天都美好')
             break
+        else:
+            print_red('[!]无法识别的指令！')
 
 
 if __name__ == '__main__':
