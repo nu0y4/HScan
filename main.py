@@ -22,8 +22,8 @@ def hprint(context='',  # 内容。
            logo=False
            ):
     if logo:
-        print_red(logo_pic_h, tf=False)
-        print_green(logo_pic_t, tf=False)
+        print_red(logo_pic_h)
+        print_green(logo_pic_t)
     else:
         if enter:
             print(f'{context}')
