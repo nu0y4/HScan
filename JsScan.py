@@ -27,15 +27,18 @@ def browse_webpage(url):
     options.add_argument("--headless")  # 开启无界面模式
     options.add_argument("--disable-gpu")  # 禁用gpu
     driver = webdriver.Chrome(chrome_options=options)
-
-    driver.get(url)
-    # 获取网页源代码
-    html = driver.page_source
-    # 关闭浏览器并杀掉Chrome进程
-    driver.quit()
-    webdriver.Chrome(service_log_path=None).service.stop()
-    # 返回网页内容
-    return html
+    try:
+        driver.get(url)
+        # 获取网页源代码
+        html = driver.page_source
+        # 关闭浏览器并杀掉Chrome进程
+        driver.quit()
+        webdriver.Chrome(service_log_path=None).service.stop()
+        # 返回网页内容
+        return html
+    except:
+        print_red('[!]出错！网络连接失败或者chrome引擎未安装')
+        return '错误'
 
 
 def parse_js_links(html):
@@ -69,13 +72,14 @@ def extract_domain(url):
 
 def run(url):
     req = browse_webpage(url)
-    for i in parse_js_links(req, ):
-        if i.startswith("/") and not i.startswith("//"):
-            domain = extract_domain(url)
-            js_url = domain + i
-            print(js_url)
-        else:
-            print(i)
+    if not req == '错误':
+        for i in parse_js_links(req, ):
+            if i.startswith("/") and not i.startswith("//"):
+                domain = extract_domain(url)
+                js_url = domain + i
+                print(js_url)
+            else:
+                print(i)
 
 
 def main():
