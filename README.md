@@ -6,6 +6,7 @@
 功能：
 -- poc扫描(单链接或者批量扫描)
 -- 网页url提取
+-- 权重查询
 ```
 ```
 未来更新功能：
@@ -36,6 +37,10 @@ CNVD-2021-30167
 
 ## JS爬虫
 ![image](https://user-images.githubusercontent.com/46450756/235308823-46bede86-8f1c-420f-9cd3-d6a025ea3097.png)
+
+## 权重查询
+![image](https://user-images.githubusercontent.com/46450756/235309061-dd06c1b9-1325-4834-92db-307d94e1c9a4.png)
+
 
 ## 安装:
 ```
