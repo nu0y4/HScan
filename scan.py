@@ -2,23 +2,26 @@ import random
 
 from colorama import Fore
 
-from HScan.main import print_green, print_red, print_yellow
-from HScan import Run, qz
-from HScan import JsScan, logo
+import JsScan
+import Run
+import qz
+from main import print_green, print_red, print_yellow
+from logo import logo1, logo2, logo3, banner
 
 info = {
     '0': '退出',
     '1': 'OA漏洞扫描',
     '2': 'JS爬虫',
     '3': '权重查询',
+    '4': '显示菜单',
 }
 
 
 def print_logo():
     dic = [
-        logo.logo1,
-        logo.logo2,
-        logo.logo3,
+        logo1,
+        logo2,
+        logo3,
     ]
     print(random.choice(dic))
 
@@ -31,6 +34,7 @@ def print_title():
 
 def main():
     print_logo()
+    print(banner)
     print_title()
     print()
     while True:
@@ -44,9 +48,8 @@ def main():
         if key == '0':
             print_red('[+]再见~ 祝，我们都每天都美好')
             break
-        else:
-            print_red('[!]无法识别的指令！')
-
+        if key == '4':
+            print_title()
 
 if __name__ == '__main__':
     main()
