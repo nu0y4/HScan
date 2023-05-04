@@ -25,7 +25,6 @@ def browse_webpage(url):
     # 使用Chrome浏览器引擎打开网页
     options = webdriver.ChromeOptions()  # 创建一个配置对象
     options.add_argument("--headless")  # 开启无界面模式
-    options.add_argument("--disable-gpu")  # 禁用gpu
     driver = webdriver.Chrome(chrome_options=options)
     try:
         driver.get(url)

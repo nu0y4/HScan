@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from HScan.main import print_green, print_red
+from main import print_green, print_red
 
 
 def extract_weight(json_text):

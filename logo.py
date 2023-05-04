@@ -15,7 +15,7 @@ logo1 = f'''{Fore.RESET}
 {Fore.BLUE}                 MM                             {Fore.RED}            d'                              {Fore.RESET}
 {Fore.BLUE}                 MM                                       {Fore.RED} ,P                               {Fore.RESET}
 {Fore.BLUE}                 MM                                        {Fore.RED}M                                {Fore.RESET}
-                               {Fore.RESET}
+                              {Fore.RESET}
 '''
 
 logo2 = f'''{Fore.RED}
@@ -40,5 +40,10 @@ logo3 = f'''{Fore.GREEN}
  ▒ ░░▒░▒▒ ▒▓▒ ▒ ░░ ░▒ ▒  ░ ▒▒   ▓▒█░░ ▒░   ▒ ▒ 
  ▒ ░▒░ ░░ ░▒  ░ ░  ░  ▒     ▒   ▒▒ ░░ ░░   ░ ▒░
  ░  ░░ ░░  ░  ░  ░          ░   ▒      ░   ░ ░ 
- ░  ░  ░      ░  ░ ░            ░  ░         ░ {Fore.RESET}
+ ░  ░  ░      ░  ░ ░            ░  ░         ░ 
+{Fore.RESET}
 '''
+
+banner = f'''
+From https://github.com/soryecker/HScan
+Team: {Fore.RED}H4ckBu7eer{Fore.RESET} By {Fore.BLUE}Sor{Fore.RESET}'''
